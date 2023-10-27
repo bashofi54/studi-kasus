@@ -1,4 +1,4 @@
 {
   "editor.guides.bracketPairs": true,
-  "editor.bracketPairColorization.enabled": false
+  "editor.bracketPairColorization.enabled": true
 }

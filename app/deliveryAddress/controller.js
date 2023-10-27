@@ -53,19 +53,8 @@ const update = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    let {id} =req.params;
-    let address = await DeliveryAddress.findById(id);
-    let subjectAddrs = subject('DeliveryAddress', {...address, user_id: address.user});
-    let policy = policyfor(req.user);
-    if(!policy.can('delete', subjectAddrs)) {
-      return res.json({
-        error: 1,
-        message: `you're not allowed to modify this resource`
-      });
-    }
-
-    address = await DeliveryAddress.findByIdAndDelete(id);
-    res.json(address);
+    address = await DeliveryAddress.findByIdAndDelete(req.params.id);
+    return res.json(address);
   } catch (err) {
     if(err && err.name === 'ValidationError'){
       return res.json({

@@ -9,15 +9,10 @@ router.get('/delivery-addresses',
 
 router.post('/delivery-addresses',
   police_check('create', 'DeliveryAddress'),
-  delivAddCntrl.store
-);
+  delivAddCntrl.store);
 
-router.put('/delivery-addresses/:id',
-  delivAddCntrl.update
-);
+router.put('/delivery-addresses/:id',delivAddCntrl.update);
 
-router.delete('/delivery-addresses/:id',
-  delivAddCntrl.destroy
-);
+router.delete('/delivery-addresses/:id',delivAddCntrl.destroy);
 
 module.exports = router;

@@ -1,0 +1,51 @@
+POST http://localhost:3001/auth/register
+Content-Type: application/x-www-form-urlencoded
+
+full_name=bashofi
+&email=bashofi@gmail.com
+&password=Kmzway87aa
+&role=user
+
+###
+GET http://localhost:3001/auth/users
+# Authorization: Bearer 
+
+
+###
+POST http://localhost:3001/auth/login
+Content-Type: application/json
+
+{
+  "email" : "bashofi@gmail.com",
+  "password" : "Kmzway87aa"
+}
+
+###
+GET http://localhost:3001/auth/token
+
+###
+DELETE http://localhost:3001/auth/logout
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVhOTM1MzE5YjllYTk2YjgxYmE3N2YiLCJmdWxsX25hbWUiOiJiYXNob2ZpIiwiZW1haWwiOiJiYXNob2ZpQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiY3VzdG9tZXJfaWQiOjE0LCJpYXQiOjE2NjY4ODA3MjAsImV4cCI6MTY2Njk2NzEyMH0.cR8levEiQdQ6N5_x0SHWS05tXq_-bocq2P4SmdBg1YI
+
+
+
+###
+GET http://localhost:3001/auth/me
+Authorization: Bearer 
+
+
+###
+POST http://localhost:3001/api/delivery-addresses
+Content-Type: multipart/form-data
+# Authorization: Bearer 
+
+
+{
+  "name": "rumah",
+	"provinsi": "jawatengah",
+	"kabupaten": "semarang",
+	"kecamatan": "kaliwungu",
+	"kelurahan": "kradenan",
+	"detail": "kradenan",
+	"user" : "id"
+}

@@ -3,7 +3,15 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
-const { getToken } = require('../../utils');
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.json(users)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const register = async (req, res, next) => {
     try {
@@ -43,53 +51,54 @@ const login = async (req, res, next) => {
     passport.authenticate('local', async function (err, user) {
         if (err) return next(err);
 
-        if (!user) return res.json({ error: 1, message: 'Email or Password Incorrect' });
+        if (!user) return res.status(400).json({ 
+            error: 1,
+            message: 'Email or Password Incorrect' 
+        });
 
-        let signed = jwt.sign(user, config.secretkey);
+        let signeds = jwt.sign(user, config.secretkey, { expiresIn: '1d' });
 
-        await User.findByIdAndUpdate(user._id, { $push: { token: signed } });
+        await User.findByIdAndUpdate(user._id, { $push: { token: signeds } });
+
+        // localStorage.setItem('tokens', signeds)
+
+        res.cookie('tokensTo', signeds, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+            // .cookie("tokensTo", true, { origin: "http://localhost:3009", secure: true, sameSite: 'none'})
 
         res.json({
             message: 'Login Successfully',
             user,
-            token: signed
+            token: signeds
         })
     })(req, res, next)
 }  
 
 const logout = async (req, res, next) => {
-    let token = getToken(req);
+    let logoutt = req.cookies.tokensTo;
+    if(!logoutt) return res.sendStatus(204);
+    let user = await User.find({ token: logoutt });
+    if(!user[0]) return res.sendStatus(204);
+    await User.findOneAndUpdate({ token: { $in: [logoutt] } }, { $pull: { token: logoutt } }, { useFindAndModify: false });
+    res.clearCookie('tokensTo');
+    return res.sendStatus(200);
 
-    let user = await User.findOneAndUpdate({ token: { $in: [token] } }, { $pull: { token: token } }, { useFindAndModify: false });
-
-    if (!token || !user) {
-        res.json({
-            error: 1,
-            message: 'No User Found..!'
-        });
-    }
-
-    return res.json({
-        error: 0,
-        message: 'Logout Berhasil'
-    });
 }
 
 const me = (req, res, next) => {
     if (!req.user) {
         res.json({
             err: 1,
-            message: `you're not login or token is expired..!`
+            message: `you're not login or token is expired.!`
         })
     }
-
     res.json(req.user);
 }
 
 module.exports = {
+    getUsers,
     register,
     localStrategy,
     login,
     logout,
-    me
+    me,
 }

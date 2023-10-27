@@ -6,7 +6,7 @@ const User = require('../app/user/model');
 function decodeToken() {
     return async function(req, res, next) {
         try {
-            let token = getToken(req);
+            let token = req.cookies.tokensTo;
 
             if(!token) return next();
 
@@ -33,7 +33,8 @@ function decodeToken() {
     }
 }
 
-//midleware untuk cek hak akses
+//*midleware untuk cek hak akses
+
 function police_check(action, subject) {
     return function(req, res, next) {
         let policy = policyfor(req.user);

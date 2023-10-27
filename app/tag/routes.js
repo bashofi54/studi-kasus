@@ -7,17 +7,17 @@ router.get('/tags',
 );
 
 router.post('/tags', 
-  // police_check('create', 'Tag'),
+  police_check('create', 'Tag'),
   tagCntrl.store
 );
 
 router.put('/tags/:id',
-  // police_check('create', 'Tag'),
+  police_check('create', 'Tag'),
   tagCntrl.update
 );
 
 router.delete('/tags/:id',
-  // police_check('create', 'Tag'),
+  police_check('create', 'Tag'),
   tagCntrl.destroy
 );
 

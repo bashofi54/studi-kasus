@@ -7,7 +7,7 @@ router.get('/categories',
 );
 
 router.post('/categories',
-  // police_check('create', 'Category'),
+  police_check('create', 'Category'),
   categoryCntrl.store
 );
 router.put('/categories/:id',

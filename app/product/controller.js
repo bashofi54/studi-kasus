@@ -90,7 +90,7 @@ const store = async (req, res, next) => {
 
 const index = async (req, res, next) => {
     try {
-        let { skip = 0, limit = 10, q = '', category = '', tags = [] } = req.query;
+        let { skip = 0, limit = 15, q = '', category = '', tags = [] } = req.query;
         let criteria = {};
 
         if(q.length){
@@ -165,6 +165,7 @@ const update = async (req, res, next) => {
             let tmp_path = req.file.path;
             let originalExt = req.file.originalname.split('.')[req.file.originalname.split('.').length - 1];
             let filename = req.file.filename + '.' + originalExt;
+            payload.image_url = filename;
             let target_path = path.resolve(config.rootPath, `public/images/products/${filename}`);
 
             const src = fs.createReadStream(tmp_path);

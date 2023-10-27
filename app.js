@@ -14,18 +14,22 @@ const cartRoute = require('./app/cart/routes');
 const orderRoute = require('./app/order/routes');
 const invoiceRoute = require('./app/invoice/routes');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(cors());
+app.use(cors({ credentials:true, origin:'http://localhost:3009'}));
+app.use(cookieParser()); 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use('/images', express.static(path.join(__dirname, 'public', 'images', 'products')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.use(decodeToken());
 
 app.use('/auth', authRoute);
